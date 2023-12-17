@@ -30,7 +30,7 @@
 </script>
 
 {#each todos as todo}
-	<Todo todoText={todo.text} yPos={todo.y}/>
+	<Todo todoText={todo.text} y={todo.y}/>
 {/each}
 
 <T.PerspectiveCamera makeDefault position={[0, 5, 15]} fov={25}>
@@ -39,17 +39,6 @@
 
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
-
-<Grid
-	position.y={-0.001}
-	cellColor="#ffffff"
-	sectionColor="#ffffff"
-	sectionThickness={0}
-	fadeDistance={25}
-	cellSize={2}
-/>
-
-<ContactShadows scale={10} blur={2} far={2.5} opacity={0.5} />
 
 <!-- TorusKnot -->
 <Float floatIntensity={1} floatingRange={[0, 1]}>

@@ -4,10 +4,9 @@
 	import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
 	import { T } from '@threlte/core'
 	import { useTexture } from '@threlte/extras'
-	import { MeshMatcapMaterial } from 'three'
 
 	export let todoText = 'Hello World!'
-	export let yPos = 0
+	export let y = 0
 
 	export let size = 1
 	export let height = 0.2
@@ -47,7 +46,7 @@
 	<T.Mesh
 		geometry={textGeometry}
 		position.x={0}
-		position.y={yPos}
+		position.y={y}
 		position.z={-2}
 	>
 		<!-- <T.MeshStandardMaterial color={color} /> -->
