@@ -7,13 +7,13 @@
 
 	export let todoText = 'Hello World!'
 	export let y = 0
+	export let z = 0
 
-	export let size = 1
-	export let height = 0.2
-
-	let boundingBox
+	let size = 1
+	let height = 0.2
 
 	let textGeometry: TextGeometry
+	let loaded = false
 
 	const matcapTexture = useTexture('textures/matcaps/2.png')
 
@@ -32,24 +32,23 @@
 				bevelSegments: 7,
 			})
 
-			// get boundingBox, useful for centering
-			textGeometry.computeBoundingBox()
-			boundingBox = textGeometry.boundingBox
-			console.log(boundingBox)
-
 			textGeometry.center()
+
+			loaded = true
 		})
 	})
 </script>
 
-{#await matcapTexture then matcap}
-	<T.Mesh
-		geometry={textGeometry}
-		position.x={0}
-		position.y={y}
-		position.z={-2}
-	>
-		<!-- <T.MeshStandardMaterial color={color} /> -->
-		<T.MeshMatcapMaterial matcap={matcap} />
-	</T.Mesh>
-{/await}
+{#if loaded}
+	{#await matcapTexture then matcap}
+		<T.Mesh
+			geometry={textGeometry}
+			position.x={0}
+			position.y={y}
+			position.z={z}
+		>
+			<!-- <T.MeshStandardMaterial color={color} /> -->
+			<T.MeshMatcapMaterial matcap={matcap} />
+		</T.Mesh>
+	{/await}
+{/if}

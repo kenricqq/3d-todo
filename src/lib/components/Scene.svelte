@@ -1,39 +1,45 @@
 <script lang="ts">
 	import { T } from '@threlte/core'
-	import {
-		ContactShadows,
-		Float,
-		Grid,
-		OrbitControls,
-		interactivity,
-	} from '@threlte/extras'
+	import { HTML, Float, OrbitControls, interactivity } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
-	import Box from './Box.svelte'
+	import IBox from './IBox.svelte'
 	import Todo from './Todo.svelte'
 
 	export let todos = [
-		{ id: 1, text: 'Learn Svelte', y: 0 },
-		{ id: 2, text: 'Learn Three.js', y: 1.5 },
-		{ id: 3, text: 'Build a cool app', y: 3 },
+		{ id: 1, text: 'Learn Svelte' },
+		{ id: 2, text: 'Learn Three.js' },
+		{ id: 3, text: 'Build a cool app' },
 	]
 
 	const { target } = interactivity()
 	target.set(document.getElementById('int-target') ?? undefined)
 
-	const pos = spring({ x: 0, z: 0 })
+	const pos = spring({ x: 2, z: 1 })
 	const setRandomPos = () => {
 		pos.set({
 			x: (Math.random() - 0.5) * 5,
 			z: (Math.random() - 0.5) * 5,
 		})
 	}
+
+	const onClick = () => {
+		console.log('HI THERE')
+	}
+	let isHovering = false
+	let isPointerDown = false
+
+	let inputText = 'todo'
+
+	const handleSubmit = () => {
+		todos = [...todos, { id: Math.random(), text: inputText }]
+		inputText = ''
+		console.log(todos)
+	}
 </script>
 
-{#each todos as todo}
-	<Todo todoText={todo.text} y={todo.y}/>
-{/each}
+<Todo todoText={'hi there'} y={5} z={1} />
 
-<T.PerspectiveCamera makeDefault position={[0, 5, 15]} fov={25}>
+<T.PerspectiveCamera makeDefault position={[0, 5, 35]} fov={25}>
 	<OrbitControls enableDamping autoRotateSpeed={0.5} target.y={1.5} />
 </T.PerspectiveCamera>
 
@@ -53,4 +59,39 @@
 	</T.Mesh>
 </Float>
 
-<Box on:click={setRandomPos} position.x={$pos.x} position.z={$pos.z} />
+<T.Mesh>
+	<HTML position.y={2} position.z={2} transform>
+		<button
+			on:pointerenter={() => (isHovering = true)}
+			on:pointerleave={() => {
+				isPointerDown = false
+				isHovering = false
+			}}
+			on:pointerdown={() => (isPointerDown = true)}
+			on:pointerup={() => (isPointerDown = false)}
+			on:pointercancel={() => {
+				isPointerDown = false
+				isHovering = false
+			}}
+			on:click={onClick}
+			class="bg-orange-500 rounded-full px-3 text-white hover:opacity-90 active:opacity-70"
+		>
+			I'm a regular HTML button
+		</button>
+
+		<form on:submit={handleSubmit}>
+			<input
+				type="text"
+				bind:value={inputText}
+				placeholder="Type something..."
+			/>
+			<button type="submit">Submit</button>
+		</form>
+
+		{#each todos as todo}
+			<h2>{todo.text}</h2>
+		{/each}
+	</HTML>
+</T.Mesh>
+
+<IBox on:click={setRandomPos} position.x={$pos.x} position.z={$pos.z} />
