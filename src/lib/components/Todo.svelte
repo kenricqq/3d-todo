@@ -1,54 +1,19 @@
-<script lang="ts">
-	import { onMount } from 'svelte'
-	import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
-	import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
-	import { T } from '@threlte/core'
-	import { useTexture } from '@threlte/extras'
-
-	export let todoText = 'Hello World!'
-	export let y = 0
-	export let z = 0
-
-	let size = 1
-	let height = 0.2
-
-	let textGeometry: TextGeometry
-	let loaded = false
-
-	const matcapTexture = useTexture('textures/matcaps/2.png')
-
-	onMount(() => {
-		const loader = new FontLoader()
-		loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
-			textGeometry = new TextGeometry(todoText, {
-				font: font,
-				size: size,
-				height: height,
-				curveSegments: 3,
-				bevelEnabled: true,
-				bevelThickness: 0.001,
-				bevelSize: 0.05,
-				bevelOffset: 0,
-				bevelSegments: 7,
-			})
-
-			textGeometry.center()
-
-			loaded = true
-		})
-	})
+<script>
+	import { deleteTodo, toggleTodo } from '$stores/todoStore'
+	export let todo
 </script>
 
-{#if loaded}
-	{#await matcapTexture then matcap}
-		<T.Mesh
-			geometry={textGeometry}
-			position.x={0}
-			position.y={y}
-			position.z={z}
-		>
-			<!-- <T.MeshStandardMaterial color={color} /> -->
-			<T.MeshMatcapMaterial matcap={matcap} />
-		</T.Mesh>
-	{/await}
-{/if}
+<li
+	class="bg-white flex items-center shadow-sm border border-gray-200 rounded-lg my-2 py-2 px-4"
+>
+	<input
+		type="checkbox"
+		name="completed"
+		checked={todo.completed}
+		on:change={() => toggleTodo(todo.id)}
+		class="mr-2 h-5 w-5"
+	/>
+   <span class={`flex-1 text-gray-800 ${todo.completed ? 'line-through': ''}`}>{todo.text}</span>
+
+   <button type="button" class="text-sm bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline" on:click={() => deleteTodo(todo.id)}>Delete</button>
+</li>

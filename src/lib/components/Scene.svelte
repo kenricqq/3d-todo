@@ -1,15 +1,20 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import { T } from '@threlte/core'
 	import { HTML, Float, OrbitControls, interactivity } from '@threlte/extras'
 	import { spring } from 'svelte/motion'
 	import IBox from './IBox.svelte'
+	import DText from './3DText.svelte'
 	import Todo from './Todo.svelte'
+	import { todos } from '$stores/todoStore.js'
+	import { addTodo } from '$stores/todoStore'
 
-	export let todos = [
-		{ id: 1, text: 'Learn Svelte' },
-		{ id: 2, text: 'Learn Three.js' },
-		{ id: 3, text: 'Build a cool app' },
-	]
+	onMount(() => {
+		const savedTodos = localStorage.getItem('todos')
+		if (savedTodos) {
+			todos.set(JSON.parse(savedTodos))
+		}
+	})
 
 	const { target } = interactivity()
 	target.set(document.getElementById('int-target') ?? undefined)
@@ -22,22 +27,19 @@
 		})
 	}
 
-	const onClick = () => {
-		console.log('HI THERE')
-	}
 	let isHovering = false
 	let isPointerDown = false
 
-	let inputText = 'todo'
+	let inputText = ''
 
 	const handleSubmit = () => {
-		todos = [...todos, { id: Math.random(), text: inputText }]
+		addTodo(inputText)
+		console.log($todos)
 		inputText = ''
-		console.log(todos)
 	}
 </script>
 
-<Todo todoText={'hi there'} y={5} z={1} />
+<DText todoText={'hi there'} y={5} z={1} />
 
 <T.PerspectiveCamera makeDefault position={[0, 5, 35]} fov={25}>
 	<OrbitControls enableDamping autoRotateSpeed={0.5} target.y={1.5} />
@@ -61,24 +63,6 @@
 
 <T.Mesh>
 	<HTML position.y={2} position.z={2} transform>
-		<button
-			on:pointerenter={() => (isHovering = true)}
-			on:pointerleave={() => {
-				isPointerDown = false
-				isHovering = false
-			}}
-			on:pointerdown={() => (isPointerDown = true)}
-			on:pointerup={() => (isPointerDown = false)}
-			on:pointercancel={() => {
-				isPointerDown = false
-				isHovering = false
-			}}
-			on:click={onClick}
-			class="bg-orange-500 rounded-full px-3 text-white hover:opacity-90 active:opacity-70"
-		>
-			I'm a regular HTML button
-		</button>
-
 		<form on:submit={handleSubmit}>
 			<input
 				type="text"
@@ -88,8 +72,8 @@
 			<button type="submit">Submit</button>
 		</form>
 
-		{#each todos as todo}
-			<h2>{todo.text}</h2>
+		{#each $todos as todo}
+			<Todo todo={todo} />
 		{/each}
 	</HTML>
 </T.Mesh>
