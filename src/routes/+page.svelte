@@ -1,36 +1,46 @@
 <script lang="ts">
 	import App from '$lib/components/App.svelte'
-	import { RangeSlider } from '@skeletonlabs/skeleton'
+	import { Play, Pause } from 'lucide-svelte'
 
-	let value = 7
-	let max = 10
+	let paused = false
+
+	const toggleAudio = () => {
+		const audio = document.getElementById('myAudio')
+		if (paused) {
+			audio.play()
+		} else {
+			audio.pause()
+		}
+		paused = !paused
+	}
 </script>
 
 <div class="main-container">
 	<!-- svelte main -->
-	<div class="w-full h-[30vh] flex justify-center items-center">
+	<div class="w-full h-[30vh] flex flex-col justify-center items-center">
 		<!-- first section -->
 		<section class="">
-			<h1 class="bg-primary-300">Hey There</h1>
-		</section>
-
-		<!-- slider -->
-		<RangeSlider
-			name="range-slider"
-			bind:value={value}
-			max={max}
-			step={1}
-      on:change={e => console.log(e)}
-			ticked
-		>
-			<div class="flex justify-between items-center">
-				<div class="font-bold">Label</div>
-				<div class="text-xs">{value} / {max}</div>
+			<h1 class="p-5 mt-8 text-5xl">Welcome to 3D Todo.</h1>
+			<audio id="myAudio" autoplay loop>
+				<source src="abstract.mp3" type="audio/mpeg" />
+			</audio>
+			<div class="flex justify-center items-center bg-opacity-50 w-1/2 rounded-lg p-3 bg-secondary-300">
+				<h1 class="text-2xl p-2">Music</h1>
+				<button
+					on:click={toggleAudio}
+					class="btn-icon variant-filled-primary"
+				>
+					{#if paused}
+						<Play />
+					{:else}
+						<Pause />
+					{/if}
+				</button>
 			</div>
-		</RangeSlider>
+		</section>
 	</div>
 
-	<!-- threlte main -->
+	<!-- 3d main -->
 	<div class="h-[70vh] w-[100ww]">
 		<App />
 	</div>

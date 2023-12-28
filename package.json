@@ -37,6 +37,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@threlte/flex": "^1.0.0"
+    "@threlte/flex": "^1.0.0",
+    "lucide-svelte": "^0.302.0"
   }
 }

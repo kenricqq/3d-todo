@@ -67,9 +67,11 @@
 			<input
 				type="text"
 				bind:value={inputText}
-				placeholder="Type something..."
+				placeholder="make a wish"
+				class="btn"
 			/>
-			<button type="submit">Submit</button>
+			<button type="submit" class="btn variant-filled-primary">Submit</button
+			>
 		</form>
 
 		{#each $todos as todo}
