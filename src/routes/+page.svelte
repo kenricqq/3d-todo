@@ -1,8 +1,8 @@
 <script lang="ts">
 	import App from '$lib/components/App.svelte'
-	import { Play, Pause } from 'lucide-svelte'
+	import { Play, Pause, Github } from 'lucide-svelte'
 
-	let paused = false
+	let paused = true
 
 	const toggleAudio = () => {
 		const audio = document.getElementById('myAudio')
@@ -20,22 +20,34 @@
 	<div class="w-full h-[30vh] flex flex-col justify-center items-center">
 		<!-- first section -->
 		<section class="">
-			<h1 class="p-5 mt-8 text-5xl">Welcome to 3D Todo.</h1>
+			<h1 class="p-5 mt-8 text-5xl font-semibold">Welcome to 3D Todo!</h1>
 			<audio id="myAudio" autoplay loop>
 				<source src="abstract.mp3" type="audio/mpeg" />
 			</audio>
-			<div class="flex justify-center items-center bg-opacity-50 w-1/2 rounded-lg p-3 bg-secondary-300">
-				<h1 class="text-2xl p-2">Music</h1>
-				<button
-					on:click={toggleAudio}
-					class="btn-icon variant-filled-primary"
+			<div class="wrapper flex gap-3">
+				<div
+					class="flex justify-center items-center bg-opacity-50 w-1/2 rounded-lg p-3 bg-secondary-300"
 				>
-					{#if paused}
-						<Play />
-					{:else}
-						<Pause />
-					{/if}
-				</button>
+					<h1 class="text-2xl p-2">Music</h1>
+					<button
+						on:click={toggleAudio}
+						class="btn-icon variant-filled-primary"
+					>
+						{#if paused}
+							<Play />
+						{:else}
+							<Pause />
+						{/if}
+					</button>
+				</div>
+				<div
+					class="flex justify-center items-center bg-opacity-50 w-1/2 rounded-lg p-3 bg-secondary-300"
+				>
+					<h1 class="text-2xl p-2">Code</h1>
+					<a href="https://github.com/kenricqq/3d-todo" target="_blank" class="btn-icon variant-filled-primary">
+						<Github />
+					</a>
+				</div>
 			</div>
 		</section>
 	</div>
